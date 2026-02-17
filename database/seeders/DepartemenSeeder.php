@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Str;
 
+
 class DepartemenSeeder extends Seeder
 {
     /**
