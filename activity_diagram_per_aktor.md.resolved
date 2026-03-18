@@ -1,0 +1,373 @@
+# Activity Diagram Per Aktor — Aplikasi e-Konsumsi
+
+Berikut activity diagram yang dipisahkan berdasarkan aktor/peran dalam sistem e-Konsumsi.
+
+---
+
+## 1. User / Pemohon (Pembuat Event)
+
+Aktor yang membuat pengajuan event konsumsi, mengelola peserta & makanan, serta mengkonfirmasi penerimaan.
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Halaman Event]
+    C --> D{Pilih Aksi}
+
+    D -->|Buat Baru| E[Klik Tambah Event]
+    E --> F[Isi Form Event:\nNama, Departemen, Tanggal,\nLokasi, Deskripsi, Gambar]
+    F --> G[Pilih Makanan & Qty]
+    G --> H[Pilih Peserta]
+    H --> I{Validasi Data}
+    I -->|Gagal| F
+    I -->|Duplikat Makanan| G
+    I -->|Duplikat Peserta| H
+    I -->|Sukses| J[Simpan Event\nStatus: Open]
+    J --> K[Log Status Dibuat]
+
+    D -->|Edit Event| L{Cek Status Event}
+    L -->|Open / Reject| M[Edit Form Event]
+    M --> N[Update Makanan & Peserta]
+    N --> O{Validasi Data}
+    O -->|Gagal| M
+    O -->|Sukses| P[Simpan Perubahan]
+    P --> Q{Status Sebelumnya?}
+    Q -->|Reject| R[Ubah Status ke Open\nLog: Diajukan Ulang]
+    Q -->|Open| S[Tetap Open]
+    R --> T[Selesai Edit]
+    S --> T
+
+    L -->|Sudah Diproses| U[Tidak Bisa Edit]
+
+    D -->|Hapus Event| V{Status = Open?}
+    V -->|Ya| W[Hapus Event + Relasi]
+    V -->|Tidak| X[Tidak Bisa Hapus]
+
+    D -->|Terima Pesanan| Y{Status = Close by Umum?}
+    Y -->|Ya| Z[Konfirmasi Penerimaan\nStatus → Close by User]
+    Z --> AA[Log: Pesanan Diterima,\nEvent Selesai]
+    Y -->|Tidak| AB[Aksi Tidak Valid]
+
+    D -->|Lihat Detail| AC[Lihat Detail Event:\nKonsumsi, Peserta, Log Status]
+
+    K --> AD([End])
+    T --> AD
+    U --> AD
+    W --> AD
+    X --> AD
+    AA --> AD
+    AB --> AD
+    AC --> AD
+```
+
+---
+
+## 2. Manager Departemen (Approval Level 1)
+
+Menyetujui atau menolak event yang diajukan oleh User dari departemennya.
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Daftar Event\nFilter: Status Open]
+    C --> D[Lihat Detail Event]
+    D --> E{Keputusan}
+
+    E -->|Approve| F[Event Diterima]
+    F --> G[Status → Approved VP]
+    G --> H[Log: Disetujui oleh\nManager Departemen]
+
+    E -->|Reject| I[Isi Alasan Penolakan]
+    I --> J[Status → Reject]
+    J --> K[Log: Ditolak oleh\nManager Departemen]
+
+    H --> L([End])
+    K --> L
+```
+
+---
+
+## 3. Staf Umum (Penerima & Pengirim)
+
+Menerima event yang sudah diapprove Manager Departemen, memproses, dan mengirimkan makanan.
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Daftar Event\nFilter: Status Approved VP]
+    C --> D[Lihat Detail Event]
+    D --> E[Terima Permintaan]
+    E --> F[Status → On Process]
+    F --> G[Log: Diterima oleh Staf Umum,\nSedang Diproses]
+
+    G --> H[Proses Penyiapan Makanan]
+    
+    H --> I[Akses Event\nFilter: Status Approved VP Umum]
+    I --> J[Kirim Makanan]
+    J --> K[Status → Close by Umum]
+    K --> L[Kurangi Stok Makanan Otomatis]
+    L --> M[Buat Food Log: Keluar]
+    M --> N[Log: Makanan Sudah Dikirim\noleh Staf Umum]
+
+    N --> O([End])
+```
+
+---
+
+## 4. Manager Dept. Umum (Approval Level 2)
+
+Menyetujui atau menolak event yang sudah dalam tahap proses (On Process).
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Daftar Event\nFilter: Status On Process]
+    C --> D[Lihat Detail Event]
+    D --> E{Keputusan}
+
+    E -->|Approve| F[Event Diterima]
+    F --> G[Status → Approved VP Umum]
+    G --> H[Log: Disetujui oleh\nManager Dept. Umum]
+
+    E -->|Reject| I[Isi Alasan Penolakan]
+    I --> J[Status → Reject]
+    J --> K[Log: Ditolak oleh\nManager Dept. Umum]
+
+    H --> L([End])
+    K --> L
+```
+
+---
+
+## 5. Admin (Manajemen Sistem)
+
+Mengelola seluruh konfigurasi sistem: user, role, permission, master data, dan saldo.
+
+### 5a. Manajemen User
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Halaman User]
+    C --> D{Pilih Aksi}
+
+    D -->|Tambah| E[Isi Form User:\nNama, Email, Password,\nRole, Departemen, Detail]
+    E --> F{Validasi}
+    F -->|Gagal| E
+    F -->|Sukses| G[Simpan User + Detail + Role]
+
+    D -->|Edit| H[Pilih User]
+    H --> I[Edit Data User]
+    I --> J{Validasi}
+    J -->|Gagal| I
+    J -->|Sukses| K[Update User + Detail + Role]
+
+    D -->|Hapus| L[Pilih User]
+    L --> M[Hapus User + Detail]
+
+    D -->|Lihat| N[Lihat Daftar User\ndengan Role & Departemen]
+
+    G --> O([End])
+    K --> O
+    M --> O
+    N --> O
+```
+
+### 5b. Manajemen Role & Permission
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C{Pilih Menu}
+
+    C -->|Role| D[Akses Halaman Role]
+    D --> E{Pilih Aksi}
+    E -->|Tambah| F[Isi Nama Role +\nPilih Permissions]
+    F --> G[Simpan Role]
+    E -->|Edit| H[Ubah Nama +\nSync Permissions]
+    H --> I[Update Role]
+    E -->|Hapus| J[Hapus Role]
+
+    C -->|Permission| K[Akses Halaman Permission]
+    K --> L{Pilih Aksi}
+    L -->|Tambah| M[Isi Nama Permission]
+    M --> N[Simpan Permission]
+    L -->|Edit| O[Ubah Nama Permission]
+    O --> P[Update Permission]
+    L -->|Hapus| Q[Hapus Permission]
+
+    G --> R([End])
+    I --> R
+    J --> R
+    N --> R
+    P --> R
+    Q --> R
+```
+
+### 5c. Master Data — Departemen
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Halaman Departemen]
+    C --> D{Pilih Aksi}
+
+    D -->|Tambah| E[Isi Form:\nNama, Kode, Lokasi,\nStatus Aktif, Deskripsi]
+    E --> F{Validasi}
+    F -->|Gagal| E
+    F -->|Sukses| G[Simpan Departemen]
+
+    D -->|Edit| H[Pilih Departemen]
+    H --> I[Edit Data Departemen]
+    I --> J{Validasi}
+    J -->|Gagal| I
+    J -->|Sukses| K[Update Departemen]
+
+    D -->|Hapus| L[Pilih Departemen]
+    L --> M[Hapus Departemen]
+
+    D -->|Lihat Detail| N[Lihat Data Departemen]
+
+    G --> O([End])
+    K --> O
+    M --> O
+    N --> O
+```
+
+### 5d. Master Data — Makanan (Food)
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Halaman Makanan]
+    C --> D{Pilih Aksi}
+
+    D -->|Tambah| E[Isi Form:\nNama, Harga, Stok,\nGambar, Deskripsi]
+    E --> F{Validasi}
+    F -->|Gagal| E
+    F -->|Sukses| G[Simpan Makanan +\nBuat Food Log: Stok Awal]
+
+    D -->|Edit| H[Pilih Makanan]
+    H --> I[Edit Data Makanan]
+    I --> J{Validasi}
+    J -->|Gagal| I
+    J -->|Sukses| K[Update Makanan +\nLog Perubahan Harga/Stok]
+
+    D -->|Hapus| L[Pilih Makanan]
+    L --> M[Hapus Makanan + Gambar]
+
+    D -->|Tambah Stok| N[Isi Jumlah Stok Baru]
+    N --> O{Validasi}
+    O -->|Gagal| N
+    O -->|Sukses| P[Update Stok +\nBuat Food Log: Masuk]
+
+    D -->|Lihat Detail| Q[Lihat Makanan +\nRiwayat Food Log]
+
+    G --> R([End])
+    K --> R
+    M --> R
+    P --> R
+    Q --> R
+```
+
+### 5e. Manajemen Saldo
+
+```mermaid
+flowchart TD
+    A([Start]) --> B[Login ke Sistem]
+    B --> C[Akses Halaman Saldo\nPermission: manage saldo]
+    C --> D{Pilih Aksi}
+
+    D -->|Lihat Daftar| E[Lihat Departemen +\nSaldo Masing-masing]
+
+    D -->|Lihat Log| F[Pilih Departemen]
+    F --> G[Lihat Riwayat Transaksi\nSaldo Masuk/Keluar]
+
+    D -->|Tambah Transaksi| H[Pilih Departemen]
+    H --> I[Isi Jumlah, Status\nMasuk/Keluar, Deskripsi]
+    I --> J{Validasi}
+    J -->|Gagal| I
+    J -->|Saldo Keluar > Saldo Saat Ini| K[Error: Saldo Tidak Cukup]
+    K --> I
+    J -->|Sukses| L[Buat Log Saldo +\nUpdate Saldo Departemen]
+
+    E --> M([End])
+    G --> M
+    L --> M
+```
+
+---
+
+## 6. Semua User (Dashboard & Autentikasi)
+
+Aktivitas yang berlaku untuk semua pengguna yang terautentikasi.
+
+```mermaid
+flowchart TD
+    A([Start]) --> B{Sudah Login?}
+    B -->|Tidak| C[Akses Halaman Login]
+    C --> D[Masukkan Email & Password]
+    D --> E{Autentikasi}
+    E -->|Gagal| F[Tampilkan Error]
+    F --> D
+    E -->|Sukses| G[Redirect ke Dashboard]
+
+    B -->|Ya| G
+
+    G --> H[Lihat Dashboard Analytics:]
+    H --> I[Total Event per Status]
+    H --> J[Total Konsumsi per Departemen]
+    H --> K[Top Food Items]
+    H --> L[Statistik Saldo]
+    H --> M[Grafik Trend Event]
+
+    I --> N{Aksi Selanjutnya?}
+    J --> N
+    K --> N
+    L --> N
+    M --> N
+
+    N -->|Kelola Event| O[Ke Modul Event]
+    N -->|Kelola Data| P[Ke Master Data / Saldo]
+    N -->|Logout| Q[Logout dari Sistem]
+    Q --> R([End])
+    O --> R
+    P --> R
+```
+
+---
+
+## Ringkasan Alur Status Event (Lintas Aktor)
+
+Diagram berikut menunjukkan bagaimana status event berpindah antar aktor:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Open : User membuat event
+
+    Open --> Approved_VP : Manager Dept. approve
+    Open --> Reject : Manager Dept. reject
+
+    Approved_VP --> On_Process : Staf Umum terima
+
+    On_Process --> Approved_VP_Umum : Manager Dept. Umum approve
+    On_Process --> Reject : Manager Dept. Umum reject
+
+    Approved_VP_Umum --> Close_by_Umum : Staf Umum kirim makanan\n+ potong stok
+
+    Close_by_Umum --> Close_by_User : User konfirmasi terima
+
+    Reject --> Open : User edit & ajukan ulang
+
+    Close_by_User --> [*]
+```
+
+| Status | Aktor yang Mengubah | Keterangan |
+|--------|-------------------|------------|
+| **Open** | User/Pemohon | Event baru dibuat |
+| **Approved VP** | Manager Departemen | Disetujui level 1 |
+| **On Process** | Staf Umum | Diterima & sedang diproses |
+| **Approved VP Umum** | Manager Dept. Umum | Disetujui level 2 |
+| **Close by Umum** | Staf Umum | Makanan dikirim, stok dipotong |
+| **Close by User** | User/Pemohon | Penerimaan dikonfirmasi |
+| **Reject** | Manager Dept. / Manager Dept. Umum | Ditolak (bisa diajukan ulang) |

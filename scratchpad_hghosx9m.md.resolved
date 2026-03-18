@@ -1,0 +1,10 @@
+# Task: Save Activity Diagram as PDF
+
+## Checklist
+
+- [x] Open `file:///C:/Users/user/Documents/activity_diagram_per_aktor.html` (Accessed via [C:/Users/user/Documents/activity_diagram_per_aktor.html](file:///Users/user/Documents/activity_diagram_per_aktor.html))
+- [x] Wait for Mermaid diagrams to render (approx 5 seconds)
+- [ ] Verify diagrams are rendered (check for SVGs)
+- [ ] Click "Simpan sebagai PDF"
+- [ ] Save as `C:\Users\user\Documents\activity_diagram_per_aktor.pdf`
+- [ ] Confirm success

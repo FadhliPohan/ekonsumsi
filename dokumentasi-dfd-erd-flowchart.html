@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFD, ERD & Flowchart - Aplikasi E-Konsumsi</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --accent: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 40px;
+        }
+
+        /* ─── Cover Page ─── */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            page-break-after: always;
+            border-bottom: 3px solid var(--primary);
+            padding: 60px 40px;
+        }
+
+        .cover-page .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .cover-page h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .cover-page .subtitle {
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .cover-page .desc {
+            font-size: 15px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin-bottom: 50px;
+        }
+
+        .cover-meta {
+            display: flex;
+            gap: 40px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .cover-meta div {
+            text-align: center;
+        }
+
+        .cover-meta .label {
+            font-weight: 600;
+            color: var(--text);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ─── Section Styles ─── */
+        .section {
+            page-break-before: always;
+            padding-top: 30px;
+        }
+
+        .section:first-of-type {
+            page-break-before: avoid;
+        }
+
+        .section-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .section-header p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .subsection {
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+
+        .subsection h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .subsection p, .subsection ul {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .subsection ul {
+            padding-left: 20px;
+        }
+
+        .subsection ul li {
+            margin-bottom: 4px;
+        }
+
+        /* ─── Diagram Container ─── */
+        .diagram-container {
+            background: #fafbfc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 15px 0 25px 0;
+            overflow-x: auto;
+            page-break-inside: avoid;
+        }
+
+        .diagram-container .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* ─── Table Styles ─── */
+        .entity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin: 10px 0 20px 0;
+        }
+
+        .entity-table th {
+            background: var(--primary);
+            color: white;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .entity-table td {
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .entity-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .entity-table .pk {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .entity-table .fk {
+            color: #d97706;
+            font-weight: 600;
+        }
+
+        /* ─── Info Boxes ─── */
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .info-box strong {
+            color: var(--primary-dark);
+        }
+
+        /* Status flow table */
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+
+        .status-table th, .status-table td {
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .status-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        .badge-primary { background: #e0e7ff; color: #3730a3; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-secondary { background: #f1f5f9; color: #475569; }
+        .badge-dark { background: #e2e8f0; color: #1e293b; }
+
+        /* ─── Print Button ─── */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .print-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ─── Print Styles ─── */
+        @media print {
+            body {
+                font-size: 11px;
+                line-height: 1.5;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+            .cover-page {
+                min-height: auto;
+                padding: 120px 40px;
+            }
+            .section {
+                page-break-before: always;
+            }
+            .diagram-container {
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+            .subsection {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* ─── TOC ─── */
+        .toc {
+            page-break-after: always;
+            padding: 40px 0;
+        }
+
+        .toc h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+            padding: 0;
+        }
+
+        .toc > ol > li {
+            counter-increment: toc-counter;
+            margin-bottom: 8px;
+        }
+
+        .toc > ol > li::before {
+            content: counter(toc-counter) ".";
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .toc > ol > li > a {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .toc ol ol {
+            padding-left: 30px;
+            margin-top: 4px;
+        }
+
+        .toc ol ol li {
+            margin-bottom: 4px;
+        }
+
+        .toc ol ol li a {
+            font-size: 13px;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        .page-footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-light);
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ PRINT BUTTON ═══════════════════════════════════ -->
+<button class="print-btn" onclick="window.print()">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+    Cetak / Simpan PDF
+</button>
+
+<div class="container">
+
+    <!-- ═══════════════════════════════════ COVER PAGE ═══════════════════════════════════ -->
+    <div class="cover-page">
+        <div class="logo-text">Dokumentasi Sistem</div>
+        <h1>Aplikasi E-Konsumsi</h1>
+        <div class="subtitle">Data Flow Diagram, Entity Relationship Diagram & Flowchart</div>
+        <p class="desc">
+            Dokumen ini berisi diagram alur data (DFD), diagram relasi entitas (ERD), dan diagram alur proses (Flowchart)
+            untuk Sistem Informasi Manajemen Konsumsi Event/Kegiatan berbasis web menggunakan framework Laravel.
+        </p>
+        <div class="cover-meta">
+            <div><span class="label">Platform</span>Laravel (PHP)</div>
+            <div><span class="label">Database</span>MySQL</div>
+            <div><span class="label">Tanggal</span>Maret 2026</div>
+            <div><span class="label">Versi</span>1.0</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ DAFTAR ISI ═══════════════════════════════════ -->
+    <div class="toc">
+        <h2>Daftar Isi</h2>
+        <ol>
+            <li><a href="#deskripsi">Deskripsi Umum Sistem</a></li>
+            <li><a href="#dfd">Data Flow Diagram (DFD)</a>
+                <ol>
+                    <li><a href="#dfd-konteks">DFD Level 0 — Diagram Konteks</a></li>
+                    <li><a href="#dfd-level1">DFD Level 1 — Proses Utama</a></li>
+                </ol>
+            </li>
+            <li><a href="#erd">Entity Relationship Diagram (ERD)</a>
+                <ol>
+                    <li><a href="#erd-diagram">Diagram ERD</a></li>
+                    <li><a href="#erd-detail">Detail Entitas & Atribut</a></li>
+                </ol>
+            </li>
+            <li><a href="#flowchart">Flowchart</a>
+                <ol>
+                    <li><a href="#flow-auth">Flowchart Autentikasi</a></li>
+                    <li><a href="#flow-event">Flowchart Manajemen Event</a></li>
+                    <li><a href="#flow-approval">Flowchart Approval Event</a></li>
+                    <li><a href="#flow-food">Flowchart Manajemen Makanan</a></li>
+                    <li><a href="#flow-saldo">Flowchart Manajemen Saldo</a></li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+
+    <!-- ═══════════════════════════════════ 1. DESKRIPSI ═══════════════════════════════════ -->
+    <div class="section" id="deskripsi">
+        <div class="section-header">
+            <h2>1. Deskripsi Umum Sistem</h2>
+            <p>Gambaran umum tentang aplikasi E-Konsumsi beserta modul-modul yang ada</p>
+        </div>
+
+        <p style="font-size:14px; margin-bottom:15px;">
+            <strong>E-Konsumsi</strong> adalah Sistem Informasi Manajemen Konsumsi Kegiatan/Event yang digunakan untuk
+            mengelola pemesanan makanan pada event-event perusahaan. Sistem ini mencakup proses persetujuan bertingkat
+            (multi-level approval), manajemen stok makanan, pengelolaan saldo departemen, serta pencatatan log untuk audit.
+        </p>
+
+        <div class="info-box">
+            <strong>Modul Utama Sistem:</strong>
+            <ul style="margin-top:8px; padding-left:20px;">
+                <li><strong>Autentikasi</strong> — Login, Register, logout menggunakan Laravel Auth</li>
+                <li><strong>Master Data Departemen</strong> — CRUD data departemen/divisi perusahaan</li>
+                <li><strong>Master Data Makanan (Food)</strong> — CRUD makanan, manajemen harga & stok, log perubahan</li>
+                <li><strong>Manajemen User</strong> — CRUD user dengan detail, departemen, role & permission (Spatie)</li>
+                <li><strong>Manajemen Event</strong> — Pengajuan event konsumsi dengan peserta & daftar makanan, approval bertingkat (7 status)</li>
+                <li><strong>Manajemen Saldo</strong> — Pengelolaan saldo/anggaran per departemen, mutasi masuk/keluar</li>
+                <li><strong>Dashboard Analytics</strong> — KPI, grafik statistik event, konsumsi, saldo, dan user</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ 2. DFD ═══════════════════════════════════ -->
+    <div class="section" id="dfd">
+        <div class="section-header">
+            <h2>2. Data Flow Diagram (DFD)</h2>
+            <p>Menggambarkan aliran data pada sistem E-Konsumsi</p>
+        </div>
+
+        <!-- DFD Level 0 -->
+        <div class="subsection" id="dfd-konteks">
+            <h3>2.1 DFD Level 0 — Diagram Konteks</h3>
+            <p>Menampilkan interaksi antara entitas luar (aktor) dengan sistem E-Konsumsi secara keseluruhan.</p>
+
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart LR
+    Admin["👤 Admin"]
+    Staff["👤 Staff/Karyawan"]
+    MgrDept["👤 Manager Departemen"]
+    MgrUmum["👤 Manager Dept. Umum"]
+    StafUmum["👤 Staff Umum"]
+
+    System[("🖥️ Sistem\nE-Konsumsi")]
+
+    Admin -->|"Kelola User, Role,\nPermission, Departemen,\nMakanan, Saldo"| System
+    Staff -->|"Buat Event, Input\nKonsumsi & Peserta"| System
+    MgrDept -->|"Approve / Reject\nEvent Departemen"| System
+    StafUmum -->|"Proses Event,\nKirim Makanan"| System
+    MgrUmum -->|"Approve Event,\nClose Event"| System
+
+    System -->|"Dashboard,\nLaporan, Notifikasi"| Admin
+    System -->|"Status Event,\nRiwayat Pesanan"| Staff
+    System -->|"Daftar Event\nMenunggu Approval"| MgrDept
+    System -->|"Daftar Event\nDalam Proses"| StafUmum
+    System -->|"Daftar Event\nSiap Disetujui"| MgrUmum
+                </pre>
+            </div>
+
+            <div class="info-box">
+                <strong>Keterangan Aktor:</strong>
+                <ul style="margin-top:5px; padding-left:20px;">
+                    <li><strong>Admin</strong> — Mengelola seluruh master data, user, role, saldo</li>
+                    <li><strong>Staff/Karyawan</strong> — Membuat pengajuan event konsumsi</li>
+                    <li><strong>Manager Departemen</strong> — Menyetujui/menolak event dari departemennya</li>
+                    <li><strong>Staff Umum</strong> — Memproses dan mengirim pesanan makanan</li>
+                    <li><strong>Manager Dept. Umum</strong> — Menyetujui event yang sudah diproses</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- DFD Level 1 -->
+        <div class="subsection" id="dfd-level1">
+            <h3>2.2 DFD Level 1 — Proses Utama</h3>
+            <p>Menampilkan proses-proses utama dalam sistem beserta aliran data antar proses dan data store.</p>
+
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TB
+    %% External Entities
+    User["👤 User"]
+    Admin["👤 Admin"]
+    Approver["👤 Approver\n(Manager/Staff Umum)"]
+
+    %% Processes
+    P1(("1.0\nAutentikasi"))
+    P2(("2.0\nKelola\nMaster Data"))
+    P3(("3.0\nKelola\nEvent"))
+    P4(("4.0\nApproval\nEvent"))
+    P5(("5.0\nKelola\nSaldo"))
+    P6(("6.0\nDashboard\n& Laporan"))
+
+    %% Data Stores
+    DS1[("D1: users\n& user_details")]
+    DS2[("D2: departemens")]
+    DS3[("D3: foods\n& food_logs")]
+    DS4[("D4: events,\nconsumtions,\npesertas")]
+    DS5[("D5: saldos\n& log_saldos")]
+    DS6[("D6: event_status\n_logs")]
+
+    %% Flows
+    User -->|"Login/Register"| P1
+    P1 -->|"Data User"| DS1
+    P1 -->|"Session User"| User
+
+    Admin -->|"CRUD Departemen"| P2
+    Admin -->|"CRUD Makanan & Stok"| P2
+    P2 -->|"Data Departemen"| DS2
+    P2 -->|"Data Makanan & Log"| DS3
+
+    User -->|"Buat/Edit/Hapus Event\n+ Konsumsi + Peserta"| P3
+    P3 -->|"Data Event"| DS4
+    P3 -->|"Log Status Awal"| DS6
+    DS2 -->|"Daftar Departemen"| P3
+    DS3 -->|"Daftar Makanan"| P3
+    DS1 -->|"Daftar User"| P3
+
+    Approver -->|"Approve/Reject/Close"| P4
+    P4 -->|"Update Status Event"| DS4
+    P4 -->|"Log Perubahan Status"| DS6
+    P4 -->|"Kurangi Stok\n(saat Close by Umum)"| DS3
+
+    Admin -->|"Top-up / Tarik Saldo"| P5
+    P5 -->|"Data Saldo"| DS5
+    DS2 -->|"Daftar Departemen"| P5
+
+    DS4 -->|"Statistik Event"| P6
+    DS5 -->|"Data Saldo"| P6
+    DS1 -->|"Data User"| P6
+    DS3 -->|"Data Makanan"| P6
+    P6 -->|"Dashboard & KPI"| Admin
+    P6 -->|"Dashboard & KPI"| User
+                </pre>
+            </div>
+
+            <div class="info-box">
+                <strong>Keterangan Proses DFD Level 1:</strong>
+                <ul style="margin-top:5px; padding-left:20px;">
+                    <li><strong>1.0 Autentikasi</strong> — Proses login, register, dan logout user</li>
+                    <li><strong>2.0 Kelola Master Data</strong> — CRUD Departemen dan Makanan (termasuk stok & harga)</li>
+                    <li><strong>3.0 Kelola Event</strong> — Pembuatan event dengan daftar konsumsi dan peserta</li>
+                    <li><strong>4.0 Approval Event</strong> — Proses approval bertingkat (7 status), serta pengurangan stok makanan</li>
+                    <li><strong>5.0 Kelola Saldo</strong> — Manajemen saldo/anggaran departemen (masuk/keluar)</li>
+                    <li><strong>6.0 Dashboard & Laporan</strong> — Menampilkan KPI, grafik, dan statistik dari seluruh data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ 3. ERD ═══════════════════════════════════ -->
+    <div class="section" id="erd">
+        <div class="section-header">
+            <h2>3. Entity Relationship Diagram (ERD)</h2>
+            <p>Menggambarkan struktur database dan relasi antar entitas</p>
+        </div>
+
+        <div class="subsection" id="erd-diagram">
+            <h3>3.1 Diagram ERD</h3>
+
+            <div class="diagram-container">
+                <pre class="mermaid">
+erDiagram
+    users {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        timestamp email_verified_at
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    user_details {
+        bigint id PK
+        uuid uuid UK
+        bigint id_user FK
+        bigint id_departemen FK
+        string position
+        string phone
+        text address
+        enum gender "L / P"
+        text description
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    departemens {
+        bigint id PK
+        uuid uuid UK
+        string name
+        string code_departement UK
+        string location
+        boolean is_active
+        text description
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    foods {
+        bigint id PK
+        uuid uuid UK
+        string name
+        text description
+        string image
+        decimal price
+        integer qty_available
+        boolean is_active
+        string updated_by
+        string updated_name
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    food_logs {
+        bigint id PK
+        uuid uuid UK
+        bigint id_food FK
+        string type "price_change / stock_in / stock_out"
+        integer qty
+        decimal price_before
+        decimal price_after
+        integer qty_before
+        integer qty_after
+        text description
+        string created_by
+        string created_name
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    saldos {
+        bigint id PK
+        uuid uuid UK
+        bigint id_departemen FK
+        bigint saldo
+        bigint updated_by
+        string updated_name
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    log_saldos {
+        bigint id PK
+        bigint id_saldo FK
+        bigint saldo
+        text description
+        enum status "masuk / keluar"
+        bigint created_by
+        string created_name
+        bigint updated_by
+        string updated_name
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    events {
+        bigint id PK
+        uuid uuid UK
+        string name
+        bigint id_departemen FK
+        string name_departemen
+        tinyint status "1-7"
+        date start_date
+        date end_date
+        string location
+        string image
+        bigint id_user_created FK
+        string name_user_created
+        text description
+        text reject_reason
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    consumtions {
+        bigint id PK
+        uuid uuid UK
+        bigint id_event FK
+        bigint id_food FK
+        string food_name
+        bigint id_departemen
+        bigint id_user
+        string user_name
+        integer qty
+        decimal price
+        decimal total
+        string status
+        text description
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    pesertas {
+        bigint id PK
+        uuid uuid UK
+        bigint id_event FK
+        bigint user_id FK
+        string user_name
+        tinyint status "1=hadir / 2=tidak"
+        text description
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    event_status_logs {
+        bigint id PK
+        uuid uuid UK
+        bigint id_event FK
+        bigint user_id
+        string user_name
+        tinyint status_from
+        tinyint status_to
+        text description
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    roles {
+        bigint id PK
+        string name
+        string guard_name
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    permissions {
+        bigint id PK
+        string name
+        string guard_name
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    users ||--o| user_details : "has one"
+    user_details }o--|| departemens : "belongs to"
+    departemens ||--o| saldos : "has one"
+    saldos ||--o{ log_saldos : "has many"
+    foods ||--o{ food_logs : "has many"
+    events ||--o{ consumtions : "has many"
+    events ||--o{ pesertas : "has many"
+    events ||--o{ event_status_logs : "has many"
+    consumtions }o--|| foods : "belongs to"
+    users ||--o{ roles : "has many (pivot)"
+    roles ||--o{ permissions : "has many (pivot)"
+                </pre>
+            </div>
+        </div>
+
+        <div class="subsection" id="erd-detail">
+            <h3>3.2 Detail Entitas & Atribut</h3>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: users</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key, auto increment</td></tr>
+                <tr><td>name</td><td>string</td><td>Nama lengkap user</td></tr>
+                <tr><td>email</td><td>string (UNIQUE)</td><td>Email login, unik</td></tr>
+                <tr><td>password</td><td>string</td><td>Password yang di-hash</td></tr>
+                <tr><td>email_verified_at</td><td>timestamp</td><td>Waktu verifikasi email</td></tr>
+                <tr><td>remember_token</td><td>string</td><td>Token remember me</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: user_details</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td>uuid</td><td>uuid (UNIQUE)</td><td>Identifier publik</td></tr>
+                <tr><td class="fk">id_user</td><td>bigint (FK → users)</td><td>Relasi ke tabel users</td></tr>
+                <tr><td class="fk">id_departemen</td><td>bigint (FK → departemens)</td><td>Departemen user</td></tr>
+                <tr><td>position</td><td>string</td><td>Jabatan</td></tr>
+                <tr><td>phone</td><td>string(20)</td><td>Nomor telepon</td></tr>
+                <tr><td>address</td><td>text</td><td>Alamat</td></tr>
+                <tr><td>gender</td><td>enum (L/P)</td><td>Jenis kelamin</td></tr>
+                <tr><td>description</td><td>text</td><td>Keterangan tambahan</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: departemens</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td>uuid</td><td>uuid (UNIQUE)</td><td>Identifier publik</td></tr>
+                <tr><td>name</td><td>string</td><td>Nama departemen</td></tr>
+                <tr><td>code_departement</td><td>string (UNIQUE)</td><td>Kode departemen, unik</td></tr>
+                <tr><td>location</td><td>string</td><td>Lokasi departemen</td></tr>
+                <tr><td>is_active</td><td>boolean</td><td>Status aktif (default: true)</td></tr>
+                <tr><td>description</td><td>text</td><td>Keterangan</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: foods</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td>uuid</td><td>uuid (UNIQUE)</td><td>Identifier publik</td></tr>
+                <tr><td>name</td><td>string</td><td>Nama makanan</td></tr>
+                <tr><td>description</td><td>text</td><td>Deskripsi makanan</td></tr>
+                <tr><td>image</td><td>string</td><td>Path gambar makanan</td></tr>
+                <tr><td>price</td><td>decimal(15,2)</td><td>Harga satuan</td></tr>
+                <tr><td>qty_available</td><td>integer</td><td>Stok tersedia</td></tr>
+                <tr><td>is_active</td><td>boolean</td><td>Status aktif</td></tr>
+                <tr><td>updated_by / updated_name</td><td>string</td><td>User terakhir mengubah</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: food_logs</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td class="fk">id_food</td><td>bigint (FK → foods)</td><td>Relasi ke makanan</td></tr>
+                <tr><td>type</td><td>string</td><td>price_change / stock_in / stock_out / out</td></tr>
+                <tr><td>qty</td><td>integer</td><td>Jumlah perubahan</td></tr>
+                <tr><td>price_before / price_after</td><td>decimal(15,2)</td><td>Harga sebelum & sesudah</td></tr>
+                <tr><td>qty_before / qty_after</td><td>integer</td><td>Stok sebelum & sesudah</td></tr>
+                <tr><td>description</td><td>text</td><td>Keterangan perubahan</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: events</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td>uuid</td><td>uuid (UNIQUE)</td><td>Identifier publik</td></tr>
+                <tr><td>name</td><td>string</td><td>Nama event</td></tr>
+                <tr><td class="fk">id_departemen</td><td>bigint (FK)</td><td>Departemen penyelenggara</td></tr>
+                <tr><td>status</td><td>tinyint (1-7)</td><td>Status approval event</td></tr>
+                <tr><td>start_date / end_date</td><td>date</td><td>Tanggal mulai & selesai</td></tr>
+                <tr><td>location</td><td>string</td><td>Lokasi event</td></tr>
+                <tr><td class="fk">id_user_created</td><td>bigint (FK)</td><td>User pembuat event</td></tr>
+                <tr><td>reject_reason</td><td>text</td><td>Alasan penolakan</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: consumtions</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td class="fk">id_event</td><td>bigint (FK → events)</td><td>Relasi ke event</td></tr>
+                <tr><td class="fk">id_food</td><td>bigint (FK → foods)</td><td>Relasi ke makanan</td></tr>
+                <tr><td>qty</td><td>integer</td><td>Jumlah pesanan</td></tr>
+                <tr><td>price</td><td>decimal(15,2)</td><td>Harga satuan saat pesan</td></tr>
+                <tr><td>total</td><td>decimal(15,2)</td><td>Total = qty × price</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: pesertas</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td class="fk">id_event</td><td>bigint (FK → events)</td><td>Relasi ke event</td></tr>
+                <tr><td class="fk">user_id</td><td>bigint (FK → users)</td><td>Relasi ke user peserta</td></tr>
+                <tr><td>user_name</td><td>string</td><td>Nama peserta</td></tr>
+                <tr><td>status</td><td>tinyint</td><td>1 = Hadir, 2 = Tidak Hadir</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: event_status_logs</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td class="fk">id_event</td><td>bigint (FK → events)</td><td>Relasi ke event</td></tr>
+                <tr><td>user_id</td><td>bigint</td><td>User yang mengubah status</td></tr>
+                <tr><td>status_from / status_to</td><td>tinyint</td><td>Status sebelum & sesudah</td></tr>
+                <tr><td>description</td><td>text</td><td>Keterangan perubahan</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: saldos</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td class="fk">id_departemen</td><td>bigint (FK → departemens, UNIQUE)</td><td>1 saldo per departemen</td></tr>
+                <tr><td>saldo</td><td>bigint</td><td>Saldo saat ini</td></tr>
+                <tr><td>updated_by / updated_name</td><td>bigint/string</td><td>User terakhir mengubah</td></tr>
+            </table>
+
+            <h4 style="margin:15px 0 8px; font-size:14px; color:var(--primary-dark);">Tabel: log_saldos</h4>
+            <table class="entity-table">
+                <tr><th>Kolom</th><th>Tipe</th><th>Keterangan</th></tr>
+                <tr><td class="pk">id</td><td>bigint (PK)</td><td>Primary Key</td></tr>
+                <tr><td class="fk">id_saldo</td><td>bigint (FK → saldos)</td><td>Relasi ke saldo</td></tr>
+                <tr><td>saldo</td><td>bigint</td><td>Jumlah transaksi</td></tr>
+                <tr><td>status</td><td>enum (masuk/keluar)</td><td>Jenis mutasi</td></tr>
+                <tr><td>description</td><td>text</td><td>Keterangan transaksi</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ 4. FLOWCHART ═══════════════════════════════════ -->
+    <div class="section" id="flowchart">
+        <div class="section-header">
+            <h2>4. Flowchart</h2>
+            <p>Diagram alur proses pada masing-masing modul utama</p>
+        </div>
+
+        <!-- 4.1 Autentikasi -->
+        <div class="subsection" id="flow-auth">
+            <h3>4.1 Flowchart Autentikasi</h3>
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Start]) --> B[Akses Halaman Aplikasi]
+    B --> C{Sudah Login?}
+    C -->|Ya| D[Redirect ke Dashboard]
+    C -->|Tidak| E[Tampilkan Halaman Login]
+    E --> F[User Input Email & Password]
+    F --> G{Validasi Kredensial}
+    G -->|Valid| H[Buat Session User]
+    H --> D
+    G -->|Tidak Valid| I[Tampilkan Error]
+    I --> E
+    D --> J([End: Dashboard])
+
+    style A fill:#10b981,stroke:#059669,color:#fff
+    style J fill:#3b82f6,stroke:#2563eb,color:#fff
+    style G fill:#f59e0b,stroke:#d97706,color:#fff
+    style I fill:#ef4444,stroke:#dc2626,color:#fff
+                </pre>
+            </div>
+        </div>
+
+        <!-- 4.2 Manajemen Event -->
+        <div class="subsection" id="flow-event">
+            <h3>4.2 Flowchart Manajemen Event (Buat Event)</h3>
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Start]) --> B[Buka Halaman Buat Event]
+    B --> C[Load Daftar Departemen,\nMakanan, dan User]
+    C --> D[Isi Form Event:\nNama, Departemen, Tanggal,\nLokasi, Deskripsi]
+    D --> E[Pilih Daftar Makanan\n& Input Jumlah/Qty]
+    E --> F[Pilih Daftar Peserta]
+    F --> G{Validasi Input}
+
+    G -->|Tidak Valid| H[Tampilkan Error Validasi]
+    H --> D
+
+    G -->|Valid| I{Cek Duplikat\nMakanan?}
+    I -->|Ada Duplikat| J[Tampilkan Error:\nMakanan Duplikat]
+    J --> E
+
+    I -->|Tidak Ada| K{Cek Duplikat\nPeserta?}
+    K -->|Ada Duplikat| L[Tampilkan Error:\nPeserta Duplikat]
+    L --> F
+
+    K -->|Tidak Ada| M[DB Transaction: Begin]
+    M --> N[Simpan Data Event\ndengan Status OPEN]
+    N --> O[Simpan Data Konsumsi\nuntuk Setiap Makanan]
+    O --> P[Simpan Data Peserta\nuntuk Setiap User]
+    P --> Q[Buat Status Log:\nEvent Dibuat]
+    Q --> R[Commit Transaction]
+    R --> S([End: Event Berhasil Dibuat])
+
+    style A fill:#10b981,stroke:#059669,color:#fff
+    style S fill:#3b82f6,stroke:#2563eb,color:#fff
+    style G fill:#f59e0b,stroke:#d97706,color:#fff
+    style I fill:#f59e0b,stroke:#d97706,color:#fff
+    style K fill:#f59e0b,stroke:#d97706,color:#fff
+                </pre>
+            </div>
+        </div>
+
+        <!-- 4.3 Approval Event -->
+        <div class="subsection" id="flow-approval">
+            <h3>4.3 Flowchart Approval & Status Event</h3>
+            <p>Event memiliki 7 status dengan alur approval bertingkat:</p>
+
+            <table class="status-table" style="margin-bottom:20px;">
+                <tr>
+                    <th>Kode</th><th>Status</th><th>Aksi yang Tersedia</th><th>Oleh</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><span class="badge badge-info">Open</span></td>
+                    <td>Approve → 2, Reject → 5</td>
+                    <td>Manager Departemen</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><span class="badge badge-primary">Approved VP</span></td>
+                    <td>Approve → 3</td>
+                    <td>Staff Umum</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><span class="badge badge-warning">On Process</span></td>
+                    <td>Approve → 4, Reject → 5</td>
+                    <td>Manager Dept. Umum</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><span class="badge badge-success">Approved VP Umum</span></td>
+                    <td>Close → 6</td>
+                    <td>Staff Umum</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><span class="badge badge-danger">Reject</span></td>
+                    <td>Edit → kembali ke 1 (Open)</td>
+                    <td>Staff Pembuat</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><span class="badge badge-secondary">Close by Umum</span></td>
+                    <td>Close → 7 (Stok makanan dikurangi)</td>
+                    <td>Staff Pembuat</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td><span class="badge badge-dark">Close by User</span></td>
+                    <td>— (Final)</td>
+                    <td>—</td>
+                </tr>
+            </table>
+
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Start: Event Status = Open])
+    A --> B{Manager Dept:\nApprove / Reject?}
+
+    B -->|Approve| C["Status = Approved VP (2)"]
+    B -->|Reject| REJ["Status = Reject (5)"]
+
+    C --> D{Staff Umum:\nTerima & Proses}
+    D -->|Approve| E["Status = On Process (3)"]
+
+    E --> F{Manager Dept. Umum:\nApprove / Reject?}
+    F -->|Approve| G["Status = Approved VP Umum (4)"]
+    F -->|Reject| REJ
+
+    G --> H{Staff Umum:\nKirim Makanan}
+    H -->|Close| I["Status = Close by Umum (6)\n🔽 Kurangi Stok Makanan\n📝 Buat Food Log"]
+
+    I --> J{Staff Pembuat:\nKonfirmasi Diterima}
+    J -->|Close| K["Status = Close by User (7)\n✅ Event Selesai"]
+
+    REJ --> L{Staff Pembuat:\nEdit & Ajukan Ulang?}
+    L -->|Ya| M["Edit Event → Status = Open (1)"]
+    M --> B
+
+    K --> Z([End: Event Selesai])
+
+    style A fill:#3b82f6,stroke:#2563eb,color:#fff
+    style Z fill:#10b981,stroke:#059669,color:#fff
+    style REJ fill:#ef4444,stroke:#dc2626,color:#fff
+    style K fill:#10b981,stroke:#059669,color:#fff
+    style I fill:#f59e0b,stroke:#d97706,color:#fff
+                </pre>
+            </div>
+
+            <div class="info-box">
+                <strong>Catatan Penting:</strong> Saat event berubah ke status <em>"Close by Umum"</em> (Status 6),
+                sistem secara otomatis mengurangi stok makanan (<code>qty_available</code>) pada tabel <code>foods</code>
+                dan mencatat log pada tabel <code>food_logs</code> dengan tipe "out".
+            </div>
+        </div>
+
+        <!-- 4.4 Manajemen Makanan -->
+        <div class="subsection" id="flow-food">
+            <h3>4.4 Flowchart Manajemen Makanan</h3>
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Start]) --> B[Buka Halaman Makanan]
+    B --> C[Tampilkan Daftar Makanan\ndengan Pagination & Search]
+    C --> D{Aksi User?}
+
+    D -->|Tambah| E[Isi Form:\nNama, Harga, Stok,\nGambar, Status]
+    E --> F{Validasi Input}
+    F -->|Valid| G["Simpan Makanan\n+ Buat Food Log\n(type: stock_in)"]
+    F -->|Tidak Valid| H[Tampilkan Error]
+    H --> E
+    G --> C
+
+    D -->|Edit| I[Load Data Makanan]
+    I --> J[Edit Form]
+    J --> K{Validasi}
+    K -->|Valid| L{"Harga / Stok\nBerubah?"}
+    L -->|Ya| M["Update Makanan\n+ Buat Food Log\n(price_change/stock)"]
+    L -->|Tidak| N[Update Makanan]
+    M --> C
+    N --> C
+
+    D -->|Hapus| O["Soft Delete Makanan\n+ Buat Food Log\n(type: stock_out)"]
+    O --> C
+
+    D -->|Tambah Stok| P[Input Jumlah Stok Baru]
+    P --> Q["Update qty_available\n+ Buat Food Log\n(type: stock_in)"]
+    Q --> C
+
+    style A fill:#10b981,stroke:#059669,color:#fff
+    style G fill:#3b82f6,stroke:#2563eb,color:#fff
+    style M fill:#3b82f6,stroke:#2563eb,color:#fff
+    style O fill:#ef4444,stroke:#dc2626,color:#fff
+    style Q fill:#3b82f6,stroke:#2563eb,color:#fff
+                </pre>
+            </div>
+        </div>
+
+        <!-- 4.5 Manajemen Saldo -->
+        <div class="subsection" id="flow-saldo">
+            <h3>4.5 Flowchart Manajemen Saldo</h3>
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TD
+    A([Start]) --> B[Buka Halaman Saldo]
+    B --> C{Cek Permission:\nmanage saldo}
+    C -->|Tidak Punya| D[Redirect: Unauthorized]
+    C -->|Punya| E[Tampilkan Daftar Departemen\ndengan Saldo Masing-masing]
+
+    E --> F{Aksi Admin?}
+    F -->|Lihat Detail| G["Tampilkan Riwayat\nMutasi Saldo (Modal)"]
+    G --> E
+
+    F -->|Top-up / Tarik| H[Isi Form:\nJumlah, Status, Deskripsi]
+    H --> I{Status = Keluar?}
+    I -->|Ya| J{Jumlah >\nSaldo Saat Ini?}
+    J -->|Ya| K[Error: Saldo\nTidak Mencukupi]
+    K --> H
+    J -->|Tidak| L[Proses Transaksi]
+
+    I -->|Tidak - Masuk| L
+
+    L --> M[DB Transaction]
+    M --> N["Buat Log Saldo\n(id_saldo, jumlah, status)"]
+    N --> O{Status?}
+    O -->|Masuk| P["saldo += jumlah"]
+    O -->|Keluar| Q["saldo -= jumlah"]
+    P --> R[Simpan Saldo]
+    Q --> R
+    R --> S[Commit Transaction]
+    S --> E
+
+    style A fill:#10b981,stroke:#059669,color:#fff
+    style D fill:#ef4444,stroke:#dc2626,color:#fff
+    style K fill:#ef4444,stroke:#dc2626,color:#fff
+    style L fill:#3b82f6,stroke:#2563eb,color:#fff
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
+    <div class="page-footer">
+        <p>Dokumen dihasilkan secara otomatis untuk Aplikasi E-Konsumsi &mdash; Maret 2026</p>
+    </div>
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#dbeafe',
+            primaryTextColor: '#1e293b',
+            primaryBorderColor: '#3b82f6',
+            lineColor: '#64748b',
+            secondaryColor: '#f1f5f9',
+            tertiaryColor: '#fef3c7',
+            fontSize: '13px',
+            fontFamily: 'Inter, sans-serif',
+        },
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis',
+        },
+        er: {
+            useMaxWidth: true,
+            fontSize: 11,
+        },
+    });
+</script>
+
+</body>
+</html>
