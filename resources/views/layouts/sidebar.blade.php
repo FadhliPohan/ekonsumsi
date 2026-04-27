@@ -26,10 +26,8 @@
                     </a>
                 </li>
                 <!-- Saldo -->
-                <li class="menu-title">Saldo</li>
-
-                {{-- Saldo --}}
                 @can('manage saldo')
+                    <li class="menu-title">Saldo</li>
                     <li>
                         <a href="{{ route('saldo.index') }}" class="waves-effect">
                             <i class="bx bx-wallet"></i>
@@ -57,37 +55,39 @@
                 </li>
 
                 <!-- User Management -->
-                <li class="menu-title">User Management</li>
+                @canany(['view users', 'view roles', 'view permissions'])
+                    <li class="menu-title">User Management</li>
 
-                <!-- Users -->
-                @can('view users')
-                    <li>
-                        <a href="{{ route('users.index') }}" class="waves-effect">
-                            <i class="bx bx-user"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
-                @endcan
+                    <!-- Users -->
+                    @can('view users')
+                        <li>
+                            <a href="{{ route('users.index') }}" class="waves-effect">
+                                <i class="bx bx-user"></i>
+                                <span>Users</span>
+                            </a>
+                        </li>
+                    @endcan
 
-                <!-- Roles -->
-                @can('view roles')
-                    <li>
-                        <a href="{{ route('roles.index') }}" class="waves-effect">
-                            <i class="bx bx-shield"></i>
-                            <span>Roles</span>
-                        </a>
-                    </li>
-                @endcan
+                    <!-- Roles -->
+                    @can('view roles')
+                        <li>
+                            <a href="{{ route('roles.index') }}" class="waves-effect">
+                                <i class="bx bx-shield"></i>
+                                <span>Roles</span>
+                            </a>
+                        </li>
+                    @endcan
 
-                <!-- Permissions -->
-                @can('view permissions')
-                    <li>
-                        <a href="{{ route('permissions.index') }}" class="waves-effect">
-                            <i class="bx bx-key"></i>
-                            <span>Permissions</span>
-                        </a>
-                    </li>
-                @endcan
+                    <!-- Permissions -->
+                    @can('view permissions')
+                        <li>
+                            <a href="{{ route('permissions.index') }}" class="waves-effect">
+                                <i class="bx bx-key"></i>
+                                <span>Permissions</span>
+                            </a>
+                        </li>
+                    @endcan
+                @endcanany
 
             </ul>
         </div>
