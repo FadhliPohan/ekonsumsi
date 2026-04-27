@@ -316,6 +316,7 @@
             // EDIT
             $(document).on('click', '.btn-edit-food', function() {
                 var uuid = $(this).data('uuid');
+                $('#form-food')[0].reset();
                 $.get("/master-data/food/" + uuid, function(data) {
                     var f = data.food;
                     $('#food-uuid').val(f.uuid);
