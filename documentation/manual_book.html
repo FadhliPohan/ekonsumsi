@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Book Aplikasi E-Konsumsi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #1d4ed8;
+            --primary-soft: #eff6ff;
+            --line: #e2e8f0;
+            --text: #0f172a;
+            --muted: #64748b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .cover {
+            background: linear-gradient(140deg, #dbeafe, #eff6ff 55%, #ffffff);
+            border: 1px solid #bfdbfe;
+            border-radius: 16px;
+            padding: 46px;
+            margin-bottom: 16px;
+        }
+
+        .cover h1 { margin: 0; font-size: 34px; }
+        .cover p { color: var(--muted); margin-top: 10px; }
+
+        .meta {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .meta div {
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        .box {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 14px;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        h3 {
+            margin: 18px 0 8px;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+            font-size: 18px;
+        }
+
+        p { margin: 0 0 10px; }
+        ul, ol { margin-top: 6px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid var(--line);
+            padding: 8px 10px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary-soft);
+            color: #1e3a8a;
+        }
+
+        .note {
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .warning {
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #991b1b;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .shot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 12px;
+        }
+
+        .shot {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .shot img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .shot figcaption {
+            padding: 8px 10px;
+            font-size: 12px;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+        }
+
+        .toc ol { margin: 0; padding-left: 20px; }
+        .toc li { margin: 5px 0; }
+
+        .print-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            border: 0;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(29, 78, 216, .35);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .meta { grid-template-columns: repeat(2, minmax(0,1fr)); }
+            .shot-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            .print-btn { display: none; }
+            body { background: #fff; }
+        }
+    </style>
+</head>
+<body>
+<button class="print-btn" onclick="window.print()">Cetak / PDF</button>
+
+<div class="container">
+    <div class="cover">
+        <h1>Manual Book / Manual User</h1>
+        <p>Aplikasi E-Konsumsi - Panduan penggunaan aplikasi per role dalam proses bisnis operasional.</p>
+        <div class="meta">
+            <div><strong>Dokumen</strong><br>Manual User</div>
+            <div><strong>Versi</strong><br>1.0</div>
+            <div><strong>Tanggal</strong><br>28 April 2026</div>
+            <div><strong>Aplikasi</strong><br>E-Konsumsi</div>
+        </div>
+    </div>
+
+    <div class="box toc">
+        <h2>Daftar Isi</h2>
+        <ol>
+            <li><a href="#tujuan">Tujuan & Ruang Lingkup</a></li>
+            <li><a href="#ringkas">Ringkasan Role dan Hak Akses</a></li>
+            <li><a href="#status-event">Status Event & Arti Proses</a></li>
+            <li><a href="#admin">Panduan Role Admin</a></li>
+            <li><a href="#manager-dept">Panduan Role Manager Departemen</a></li>
+            <li><a href="#karyawan-pemohon">Panduan Role Karyawan Pemohon</a></li>
+            <li><a href="#karyawan-umum">Panduan Role Karyawan Departemen Umum</a></li>
+            <li><a href="#manager-umum">Panduan Role Manager Departemen Umum</a></li>
+            <li><a href="#troubleshoot">Troubleshooting Umum</a></li>
+        </ol>
+    </div>
+
+    <div class="box" id="tujuan">
+        <h2>1. Tujuan & Ruang Lingkup</h2>
+        <p>
+            Dokumen ini membantu user memahami langkah penggunaan aplikasi sesuai role masing-masing.
+            Fokus manual ini adalah alur bisnis event konsumsi, approval bertingkat, pengelolaan stok,
+            dan pengelolaan saldo departemen.
+        </p>
+
+        <div class="note">
+            Manual ini disusun berdasarkan implementasi terbaru sistem: kontrol akses role/permission,
+            validasi approval per departemen dan jabatan, format tanggal Indonesia, serta pemotongan saldo
+            otomatis saat event ditutup oleh Departemen Umum.
+        </div>
+
+        <div class="shot-grid">
+            <figure class="shot">
+                <img src="../public/assets/images/layouts/layout-1.jpg" alt="Contoh tampilan dashboard aplikasi">
+                <figcaption>Contoh tampilan halaman utama aplikasi (dashboard).</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../public/assets/images/layouts/layout-2.jpg" alt="Contoh tampilan menu aplikasi">
+                <figcaption>Contoh tampilan menu navigasi aplikasi.</figcaption>
+            </figure>
+        </div>
+    </div>
+
+    <div class="box" id="ringkas">
+        <h2>2. Ringkasan Role dan Hak Akses</h2>
+        <table>
+            <tr>
+                <th>Role</th>
+                <th>Akses Utama</th>
+                <th>Pembatasan</th>
+            </tr>
+            <tr>
+                <td>Admin</td>
+                <td>Semua modul (dashboard, user/role/permission, master data, saldo, event).</td>
+                <td>Tidak ada pembatasan fitur.</td>
+            </tr>
+            <tr>
+                <td>Manager Departemen</td>
+                <td>Buat event, approve/reject event Open, lihat riwayat event.</td>
+                <td>Hanya boleh approve event dari departemen yang sama.</td>
+            </tr>
+            <tr>
+                <td>Karyawan Pemohon</td>
+                <td>Buat/edit event (Open/Reject), lihat detail, konfirmasi terima.</td>
+                <td>Tidak boleh akses Master Data.</td>
+            </tr>
+            <tr>
+                <td>Karyawan Departemen Umum</td>
+                <td>Terima dan proses event, konfirmasi kirim (Close by Umum).</td>
+                <td>Harus role Karyawan, jabatan <code>karyawan</code>, departemen berisi kata "Umum".</td>
+            </tr>
+            <tr>
+                <td>Manager Departemen Umum</td>
+                <td>Approve/reject event On Process.</td>
+                <td>Harus role Manager, jabatan <code>manager</code>, departemen berisi kata "Umum".</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="box" id="status-event">
+        <h2>3. Status Event & Arti Proses</h2>
+        <table>
+            <tr><th>Kode</th><th>Status</th><th>Diubah Oleh</th><th>Keterangan</th></tr>
+            <tr><td>1</td><td>Open</td><td>Pembuat Event</td><td>Event baru dibuat atau diajukan ulang.</td></tr>
+            <tr><td>2</td><td>Approved VP</td><td>Manager Departemen</td><td>Event disetujui level departemen.</td></tr>
+            <tr><td>3</td><td>On Process</td><td>Karyawan Dept. Umum</td><td>Event diterima untuk diproses.</td></tr>
+            <tr><td>4</td><td>Approved VP Umum</td><td>Manager Dept. Umum</td><td>Event disetujui level umum.</td></tr>
+            <tr><td>5</td><td>Reject</td><td>Manager Departemen / Manager Dept. Umum</td><td>Event ditolak dan dapat diperbaiki.</td></tr>
+            <tr><td>6</td><td>Close by Umum</td><td>Karyawan Dept. Umum</td><td>Makanan dikirim, stok dan saldo dipotong, riwayat log dibuat.</td></tr>
+            <tr><td>7</td><td>Close by User</td><td>Pembuat Event</td><td>Pesanan diterima, event selesai final.</td></tr>
+        </table>
+
+        <div class="shot-grid">
+            <figure class="shot">
+                <img src="../public/assets/images/layouts/layout-3.jpg" alt="Contoh tabel status event">
+                <figcaption>Contoh tampilan list event dan status proses.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../public/assets/images/layouts/layout-4.jpg" alt="Contoh detail event dan approval">
+                <figcaption>Contoh tampilan detail event dan aksi approval.</figcaption>
+            </figure>
+        </div>
+    </div>
+
+    <div class="box" id="admin">
+        <h2>4. Panduan Role Admin</h2>
+
+        <h3>4.1 Tujuan Role</h3>
+        <p>Menjaga konfigurasi sistem, data master, hak akses user, dan saldo departemen tetap valid.</p>
+
+        <h3>4.2 Langkah Operasional Harian</h3>
+        <ol>
+            <li>Login ke aplikasi menggunakan akun Admin.</li>
+            <li>Cek dashboard untuk ringkasan event dan status proses.</li>
+            <li>Kelola user, role, permission jika ada perubahan struktur organisasi.</li>
+            <li>Kelola master data departemen dan makanan.</li>
+            <li>Kelola transaksi saldo (masuk/keluar) dan monitor riwayat log saldo.</li>
+            <li>Monitoring event untuk audit status dan log perubahan.</li>
+        </ol>
+
+        <h3>4.3 Kontrol Penting</h3>
+        <ul>
+            <li>Pastikan role user sesuai jabatan aktual (Manager/Karyawan).</li>
+            <li>Pastikan user Departemen Umum memiliki jabatan benar agar flow approval berjalan.</li>
+            <li>Gunakan log saldo dan status log event sebagai audit trail.</li>
+        </ul>
+    </div>
+
+    <div class="box" id="manager-dept">
+        <h2>5. Panduan Role Manager Departemen</h2>
+
+        <h3>5.1 Proses Approval Level 1</h3>
+        <ol>
+            <li>Buka menu <strong>Event &gt; Seluruh Event</strong>.</li>
+            <li>Filter status <strong>Open</strong>.</li>
+            <li>Buka detail event.</li>
+            <li>Periksa data konsumsi, peserta, tanggal, dan departemen.</li>
+            <li>Klik <strong>Approve VP</strong> jika sesuai, atau <strong>Reject</strong> jika perlu revisi.</li>
+        </ol>
+
+        <div class="note">
+            Tombol approve/reject hanya muncul jika event berasal dari departemen Anda.
+        </div>
+
+        <h3>5.2 Jika Event Ditolak</h3>
+        <ul>
+            <li>Wajib isi alasan reject agar pembuat event tahu perbaikan yang dibutuhkan.</li>
+            <li>Setelah pembuat memperbaiki event, status akan kembali ke Open untuk diajukan ulang.</li>
+        </ul>
+    </div>
+
+    <div class="box" id="karyawan-pemohon">
+        <h2>6. Panduan Role Karyawan Pemohon</h2>
+
+        <h3>6.1 Membuat Event Baru</h3>
+        <ol>
+            <li>Buka menu <strong>Event &gt; Buat Event Baru</strong>.</li>
+            <li>Isi informasi event: nama, departemen, tanggal, lokasi, deskripsi.</li>
+            <li>Tambahkan makanan dan jumlah (qty).</li>
+            <li>Tambahkan peserta event.</li>
+            <li>Simpan event, lalu pantau status approval.</li>
+        </ol>
+
+        <h3>6.2 Edit Event</h3>
+        <ul>
+            <li>Event bisa diedit jika status masih <strong>Open</strong> atau <strong>Reject</strong>.</li>
+            <li>Jika status Reject dan event diedit, status kembali menjadi Open (diajukan ulang).</li>
+        </ul>
+
+        <h3>6.3 Konfirmasi Event Selesai</h3>
+        <ol>
+            <li>Setelah Departemen Umum menutup event ke status <strong>Close by Umum</strong>, buka detail event.</li>
+            <li>Klik <strong>Konfirmasi Terima</strong> untuk mengubah ke <strong>Close by User</strong>.</li>
+        </ol>
+
+        <div class="warning">
+            Karyawan tidak memiliki akses ke menu Master Data (Departemen dan Makanan).
+        </div>
+    </div>
+
+    <div class="box" id="karyawan-umum">
+        <h2>7. Panduan Role Karyawan Departemen Umum</h2>
+
+        <h3>7.1 Terima dan Proses Event</h3>
+        <ol>
+            <li>Filter event status <strong>Approved VP</strong>.</li>
+            <li>Buka detail event, lalu klik <strong>Terima & Proses</strong>.</li>
+            <li>Status berubah menjadi <strong>On Process</strong>.</li>
+        </ol>
+
+        <h3>7.2 Konfirmasi Pengiriman Makanan</h3>
+        <ol>
+            <li>Filter event status <strong>Approved VP Umum</strong>.</li>
+            <li>Buka detail event, lalu klik <strong>Konfirmasi Kirim</strong>.</li>
+            <li>Status berubah ke <strong>Close by Umum</strong>.</li>
+        </ol>
+
+        <h3>7.3 Dampak Otomatis Sistem</h3>
+        <ul>
+            <li>Stok makanan berkurang sesuai konsumsi event.</li>
+            <li>Saldo departemen pemohon terpotong sesuai total biaya event.</li>
+            <li>Riwayat log makanan dan log saldo tercatat otomatis.</li>
+        </ul>
+    </div>
+
+    <div class="box" id="manager-umum">
+        <h2>8. Panduan Role Manager Departemen Umum</h2>
+
+        <h3>8.1 Approval Level 2</h3>
+        <ol>
+            <li>Filter event status <strong>On Process</strong>.</li>
+            <li>Periksa kesiapan event dan data kebutuhan konsumsi.</li>
+            <li>Klik <strong>Approve VP Umum</strong> jika disetujui atau <strong>Reject</strong> jika perlu perbaikan.</li>
+        </ol>
+
+        <div class="note">
+            Aksi ini hanya muncul jika user berada di Departemen Umum dan memiliki jabatan manager.
+        </div>
+    </div>
+
+    <div class="box" id="troubleshoot">
+        <h2>9. Troubleshooting Umum</h2>
+
+        <h3>9.1 Tombol approval tidak muncul</h3>
+        <ul>
+            <li>Periksa role user (Manager/Karyawan) di menu User.</li>
+            <li>Periksa <code>position</code> pada detail user (manager/karyawan).</li>
+            <li>Periksa departemen user, khusus flow umum harus departemen berisi kata "Umum".</li>
+            <li>Periksa status event, karena tiap aksi hanya aktif di status tertentu.</li>
+        </ul>
+
+        <h3>9.2 Event tidak bisa diproses ke status berikutnya</h3>
+        <ul>
+            <li>Pastikan transisi status valid sesuai flow bisnis.</li>
+            <li>Pastikan user yang login adalah pelaku yang berhak untuk status tersebut.</li>
+        </ul>
+
+        <h3>9.3 Saldo tidak cukup saat Close by Umum</h3>
+        <ul>
+            <li>Admin perlu menambah saldo departemen terlebih dahulu di menu Transaksi Saldo.</li>
+            <li>Setelah saldo cukup, ulangi proses konfirmasi kirim oleh Karyawan Dept. Umum.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        Manual Book E-Konsumsi - diperbarui 28 April 2026
+    </div>
+</div>
+</body>
+</html>
