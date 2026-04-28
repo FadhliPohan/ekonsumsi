@@ -24,22 +24,26 @@
                                     <i class="bx bx-show-alt"></i>
                                 </a>
                             </li>
-                            @if ($event->isEditable())
-                                <li class="list-inline-item px-1">
-                                    <a href="{{ route('event.edit', $event->uuid) }}" class="text-warning"
-                                        title="Edit">
-                                        <i class="bx bx-pencil"></i>
-                                    </a>
-                                </li>
-                            @endif
-                            @if ($event->isDeletable())
-                                <li class="list-inline-item px-1">
-                                    <a href="javascript:void(0);" class="btn-delete-event text-danger"
-                                        data-uuid="{{ $event->uuid }}" data-name="{{ $event->name }}" title="Hapus">
-                                        <i class="bx bx-trash-alt"></i>
-                                    </a>
-                                </li>
-                            @endif
+                            @can('edit events')
+                                @if ($event->isEditable())
+                                    <li class="list-inline-item px-1">
+                                        <a href="{{ route('event.edit', $event->uuid) }}" class="text-warning"
+                                            title="Edit">
+                                            <i class="bx bx-pencil"></i>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endcan
+                            @can('delete events')
+                                @if ($event->isDeletable())
+                                    <li class="list-inline-item px-1">
+                                        <a href="javascript:void(0);" class="btn-delete-event text-danger"
+                                            data-uuid="{{ $event->uuid }}" data-name="{{ $event->name }}" title="Hapus">
+                                            <i class="bx bx-trash-alt"></i>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endcan
                         </ul>
                     </td>
                     <td>

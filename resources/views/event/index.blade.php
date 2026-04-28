@@ -29,9 +29,11 @@
                 <div class="card-body">
                     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
                         <h4 class="card-title mb-2">Daftar Event</h4>
-                        <a href="{{ route('event.create') }}" class="btn btn-primary">
-                            <i class="bx bx-plus me-1"></i> Buat Event Baru
-                        </a>
+                        @can('create events')
+                            <a href="{{ route('event.create') }}" class="btn btn-primary">
+                                <i class="bx bx-plus me-1"></i> Buat Event Baru
+                            </a>
+                        @endcan
                     </div>
 
                     {{-- Search & Filter --}}
@@ -120,6 +122,19 @@
 
         var currentStatus = '';
 
+        function formatTanggalEvent(value) {
+            if (!value) return '-';
+            var dt = new Date(value);
+            if (isNaN(dt.getTime())) return '-';
+
+            return dt.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
         function loadTable() {
             $.ajax({
                 url: "{{ route('event.index') }}",
@@ -192,13 +207,15 @@
                     var event = data.event;
                     var statusLabels = @json(\App\Models\event\Event::STATUS_LABELS);
                     var statusBadges = @json(\App\Models\event\Event::STATUS_BADGES);
+                    var startDate = formatTanggalEvent(event.start_date);
+                    var endDate = event.end_date ? formatTanggalEvent(event.end_date) : null;
 
                     var html = `<div class="row">
                         <div class="col-md-6">
                             <table class="table table-borderless table-sm">
                                 <tr><th width="40%">Nama Event</th><td>${event.name}</td></tr>
                                 <tr><th>Departemen</th><td>${event.name_departemen || '-'}</td></tr>
-                                <tr><th>Tanggal</th><td>${event.start_date || '-'} ${event.end_date ? 's/d ' + event.end_date : ''}</td></tr>
+                                <tr><th>Tanggal</th><td>${startDate}${endDate ? ' s/d ' + endDate : ''}</td></tr>
                                 <tr><th>Lokasi</th><td>${event.location || '-'}</td></tr>
                                 <tr><th>Status</th><td><span class="badge ${statusBadges[event.status] || 'badge-soft-secondary'} font-size-11">${statusLabels[event.status] || 'Unknown'}</span></td></tr>
                                 <tr><th>Dibuat oleh</th><td>${event.name_user_created}</td></tr>
@@ -254,36 +271,40 @@
                     html += '</tbody></table></div></div>';
 
                     $('#detail-event-body').html(html);
-                    $('#detail-event-footer').html(buildActionButtons(event));
+                    $('#detail-event-footer').html(buildActionButtons(event, data.allowed_actions || []));
                     $('#modalDetailEvent').modal('show');
                 });
             });
-
-            // Build action buttons based on status
-            function buildActionButtons(event) {
+            // Build action buttons based on status + allowed actions
+            function buildActionButtons(event, allowedActions) {
                 var btns = '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>';
                 switch (event.status) {
-                    case 1: // Open → Manager approve/reject
+                    case 1:
+                        if (!allowedActions.includes('approve') && !allowedActions.includes('reject')) break;
                         btns = '<button class="btn btn-success btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="approve" data-label="Approve VP">Approve VP</button> ' +
                             '<button class="btn btn-danger btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="reject" data-label="Reject">Reject</button> ' + btns;
                         break;
-                    case 2: // Approved VP → Staf Umum receives
+                    case 2:
+                        if (!allowedActions.includes('approve')) break;
                         btns = '<button class="btn btn-info btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="approve" data-label="Terima & Proses">Terima & Proses</button> ' + btns;
                         break;
-                    case 3: // On Process → Manager Umum approve/reject
+                    case 3:
+                        if (!allowedActions.includes('approve') && !allowedActions.includes('reject')) break;
                         btns = '<button class="btn btn-success btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="approve" data-label="Approve VP Umum">Approve VP Umum</button> ' +
                             '<button class="btn btn-danger btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="reject" data-label="Reject">Reject</button> ' + btns;
                         break;
-                    case 4: // Approved VP Umum → Staf Umum close
+                    case 4:
+                        if (!allowedActions.includes('close')) break;
                         btns = '<button class="btn btn-warning btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="close" data-label="Konfirmasi Kirim">Konfirmasi Kirim</button> ' + btns;
                         break;
-                    case 6: // Close by Umum → User confirm
+                    case 6:
+                        if (!allowedActions.includes('close')) break;
                         btns = '<button class="btn btn-primary btn-status-action" data-uuid="' + event.uuid +
                             '" data-action="close" data-label="Konfirmasi Terima">Konfirmasi Terima</button> ' +
                             btns;
@@ -333,7 +354,12 @@
                         loadTable();
                     },
                     error: function(r) {
-                        toastr.error(r.responseJSON?.error || 'Terjadi kesalahan.', 'Error');
+                        var message = r.responseJSON?.error || r.responseJSON?.message;
+                        if (!message && r.responseJSON?.errors) {
+                            var firstKey = Object.keys(r.responseJSON.errors)[0];
+                            message = r.responseJSON.errors[firstKey][0];
+                        }
+                        toastr.error(message || 'Terjadi kesalahan.', 'Error');
                     },
                     complete: function() {
                         $btn.prop('disabled', false);
@@ -343,3 +369,4 @@
         });
     </script>
 @endsection
+

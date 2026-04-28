@@ -13,13 +13,14 @@ class SaldoPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create the permission
-        $permission = Permission::firstOrCreate(['name' => 'manage saldo']);
+        $permissions = [
+            Permission::firstOrCreate(['name' => 'view saldo']),
+            Permission::firstOrCreate(['name' => 'create saldo transaction']),
+        ];
 
-        // Assign to admin role
         $adminRole = Role::where('name', 'Admin')->first();
         if ($adminRole) {
-            $adminRole->givePermissionTo($permission);
+            $adminRole->givePermissionTo($permissions);
         }
     }
 }

@@ -5,21 +5,39 @@ namespace App\Http\Controllers\MasterData;
 use App\Http\Controllers\Controller;
 use App\Models\masterData\Departemen;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class DepartemenController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view departemen')->only(['index', 'show']);
+        $this->middleware('permission:create departemen')->only(['store']);
+        $this->middleware('permission:edit departemen')->only(['update']);
+        $this->middleware('permission:delete departemen')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $query = Departemen::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('code_departement', 'like', '%' . $search . '%')
+                    ->orWhere('location', 'like', '%' . $search . '%');
+            });
+        }
+
         if ($request->ajax()) {
-            $departements = Departemen::latest()->paginate(10);
+            $departements = $query->latest()->paginate(10);
             return view('masterdata.departement.table', compact('departements'))->render();
         }
 
-        $departements = Departemen::latest()->paginate(10);
+        $departements = $query->latest()->paginate(10);
         return view('masterdata.departement.index', compact('departements'));
     }
 

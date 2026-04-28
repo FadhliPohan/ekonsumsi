@@ -7,26 +7,26 @@
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title">Menu</li>
 
-                <!-- Dashboard -->
-                <li>
-                    <a href="{{ route('dashboard') }}" class="waves-effect">
-                        <i class="bx bx-home-circle"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+                @can('view dashboard')
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                @endcan
 
-                <!-- Event -->
-                <li class="menu-title">Event</li>
+                @can('view events')
+                    <li class="menu-title">Event</li>
+                    <li>
+                        <a href="{{ route('event.index') }}" class="waves-effect">
+                            <i class="bx bx-calendar-event"></i>
+                            <span>Seluruh Event</span>
+                        </a>
+                    </li>
+                @endcan
 
-                {{-- departemen --}}
-                <li>
-                    <a href="{{ route('event.index') }}" class="waves-effect">
-                        <i class="bx bx-calendar-event"></i>
-                        <span>Seluruh Event</span>
-                    </a>
-                </li>
-                <!-- Saldo -->
-                @can('manage saldo')
+                @canany(['view saldo', 'create saldo transaction'])
                     <li class="menu-title">Saldo</li>
                     <li>
                         <a href="{{ route('saldo.index') }}" class="waves-effect">
@@ -34,25 +34,29 @@
                             <span>Transaksi Saldo</span>
                         </a>
                     </li>
-                @endcan
-                <!-- Master Data -->
-                <li class="menu-title">Master Data</li>
+                @endcanany
 
-                {{-- departemen --}}
-                <li>
-                    <a href="{{ route('departemen.index') }}" class="waves-effect">
-                        <i class="bx bx-photo-album"></i>
-                        <span>Departemen</span>
-                    </a>
-                </li>
+                @canany(['view departemen', 'view food'])
+                    <li class="menu-title">Master Data</li>
 
-                {{-- Makanan --}}
-                <li>
-                    <a href="{{ route('food.index') }}" class="waves-effect">
-                        <i class="bx bx-food-menu"></i>
-                        <span>Makanan</span>
-                    </a>
-                </li>
+                    @can('view departemen')
+                        <li>
+                            <a href="{{ route('departemen.index') }}" class="waves-effect">
+                                <i class="bx bx-photo-album"></i>
+                                <span>Departemen</span>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('view food')
+                        <li>
+                            <a href="{{ route('food.index') }}" class="waves-effect">
+                                <i class="bx bx-food-menu"></i>
+                                <span>Makanan</span>
+                            </a>
+                        </li>
+                    @endcan
+                @endcanany
 
                 <!-- User Management -->
                 @canany(['view users', 'view roles', 'view permissions'])

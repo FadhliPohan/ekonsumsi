@@ -26,18 +26,20 @@
                         <div class="col-sm-4">
                             <div class="search-box me-2 mb-2 d-inline-block">
                                 <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Search...">
+                                    <input type="text" class="form-control" id="search-departemen" placeholder="Search...">
                                     <i class="bx bx-search-alt search-icon"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-end">
-                                <button type="button"
-                                    class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-                                    data-bs-toggle="modal" data-bs-target="#modal-departement" id="btn-add-new">
-                                    <i class="mdi mdi-plus me-1"></i> Add New Departemen
-                                </button>
+                                @can('create departemen')
+                                    <button type="button"
+                                        class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+                                        data-bs-toggle="modal" data-bs-target="#modal-departement" id="btn-add-new">
+                                        <i class="mdi mdi-plus me-1"></i> Add New Departemen
+                                    </button>
+                                @endcan
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -116,13 +118,22 @@
             });
 
             function fetchData(page) {
+                var search = $('#search-departemen').val() || '';
                 $.ajax({
-                    url: "/master-data/departemen?page=" + page,
+                    url: "/master-data/departemen?page=" + page + "&search=" + encodeURIComponent(search),
                     success: function(data) {
                         $('#table-data').html(data);
                     }
                 });
             }
+
+            var searchTimer;
+            $('#search-departemen').on('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(function() {
+                    fetchData(1);
+                }, 300);
+            });
 
             // Add New - Reset Form
             $('#btn-add-new').click(function() {

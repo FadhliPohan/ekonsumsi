@@ -26,7 +26,7 @@
                         <div class="col-sm-4">
                             <div class="search-box me-2 mb-2 d-inline-block">
                                 <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Search...">
+                                    <input type="text" class="form-control" id="search-saldo" placeholder="Search...">
                                     <i class="bx bx-search-alt search-icon"></i>
                                 </div>
                             </div>
@@ -143,13 +143,22 @@
             });
 
             function fetchData(page) {
+                var search = $('#search-saldo').val() || '';
                 $.ajax({
-                    url: "/saldo?page=" + page,
+                    url: "/saldo?page=" + page + "&search=" + encodeURIComponent(search),
                     success: function(data) {
                         $('#table-data').html(data);
                     }
                 });
             }
+
+            var searchTimer;
+            $('#search-saldo').on('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(function() {
+                    fetchData(1);
+                }, 300);
+            });
 
             function formatRupiah(angka) {
                 return 'Rp ' + new Intl.NumberFormat('id-ID').format(angka);

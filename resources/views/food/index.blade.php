@@ -79,9 +79,11 @@
                                 <i class="bx bx-search-alt search-icon"></i>
                             </div>
                         </div>
-                        <button class="btn btn-success ms-2" id="btn-add-food">
-                            <i class="bx bx-plus me-1"></i> Tambah
-                        </button>
+                        @can('create food')
+                            <button class="btn btn-success ms-2" id="btn-add-food">
+                                <i class="bx bx-plus me-1"></i> Tambah
+                            </button>
+                        @endcan
                     </div>
                 </div>
             </div>

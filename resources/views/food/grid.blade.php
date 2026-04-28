@@ -37,22 +37,26 @@
                         <h5 class="my-0 text-primary fw-bold">{{ $food->formatted_price }}</h5>
                     </div>
                     <div class="mt-3 d-flex justify-content-center gap-2">
-                        <button class="btn btn-sm btn-outline-info btn-edit-food" data-uuid="{{ $food->uuid }}"
-                            title="Edit">
-                            <i class="bx bx-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-success btn-stock-food" data-uuid="{{ $food->uuid }}"
-                            data-name="{{ $food->name }}" data-qty="{{ $food->qty_available }}" title="Tambah Stok">
-                            <i class="bx bx-plus-circle"></i>
-                        </button>
+                        @can('edit food')
+                            <button class="btn btn-sm btn-outline-info btn-edit-food" data-uuid="{{ $food->uuid }}"
+                                title="Edit">
+                                <i class="bx bx-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-success btn-stock-food" data-uuid="{{ $food->uuid }}"
+                                data-name="{{ $food->name }}" data-qty="{{ $food->qty_available }}" title="Tambah Stok">
+                                <i class="bx bx-plus-circle"></i>
+                            </button>
+                        @endcan
                         <button class="btn btn-sm btn-outline-warning btn-log-food" data-uuid="{{ $food->uuid }}"
                             data-name="{{ $food->name }}" title="Log">
                             <i class="bx bx-list-ul"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger btn-delete-food" data-uuid="{{ $food->uuid }}"
-                            data-name="{{ $food->name }}" title="Hapus">
-                            <i class="bx bx-trash"></i>
-                        </button>
+                        @can('delete food')
+                            <button class="btn btn-sm btn-outline-danger btn-delete-food" data-uuid="{{ $food->uuid }}"
+                                data-name="{{ $food->name }}" title="Hapus">
+                                <i class="bx bx-trash"></i>
+                            </button>
+                        @endcan
                     </div>
                 </div>
             </div>

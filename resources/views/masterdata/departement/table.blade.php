@@ -17,14 +17,18 @@
                     <td>{{ $departements->firstItem() + $key }}</td>
                      <td>
                         <ul class="list-inline font-size-20 contact-links mb-0">
-                            <li class="list-inline-item px-2">
-                                <a href="javascript:void(0);" class="edit-btn" data-uuid="{{ $departement->uuid }}"
-                                    title="Edit"><i class="bx bx-pencil"></i></a>
-                            </li>
-                            <li class="list-inline-item px-2">
-                                <a href="javascript:void(0);" class="delete-btn" data-uuid="{{ $departement->uuid }}"
-                                    title="Delete"><i class="bx bx-trash-alt"></i></a>
-                            </li>
+                            @can('edit departemen')
+                                <li class="list-inline-item px-2">
+                                    <a href="javascript:void(0);" class="edit-btn" data-uuid="{{ $departement->uuid }}"
+                                        title="Edit"><i class="bx bx-pencil"></i></a>
+                                </li>
+                            @endcan
+                            @can('delete departemen')
+                                <li class="list-inline-item px-2">
+                                    <a href="javascript:void(0);" class="delete-btn" data-uuid="{{ $departement->uuid }}"
+                                        title="Delete"><i class="bx bx-trash-alt"></i></a>
+                                </li>
+                            @endcan
                         </ul>
                     </td>
                     <td>

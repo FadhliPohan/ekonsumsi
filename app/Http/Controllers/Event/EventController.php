@@ -10,14 +10,26 @@ use App\Models\event\StatusLog;
 use App\Models\masterData\Food;
 use App\Models\masterData\FoodLog;
 use App\Models\masterData\Departemen;
+use App\Models\saldo\Saldo;
+use App\Models\saldo\logSaldo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view events')->only(['index', 'show']);
+        $this->middleware('permission:create events')->only(['create', 'store']);
+        $this->middleware('permission:edit events')->only(['edit', 'update']);
+        $this->middleware('permission:delete events')->only(['destroy']);
+        $this->middleware('permission:approve event departemen|approve event umum|process event umum|close event creator')->only(['updateStatus']);
+    }
+
     public function index(Request $request)
     {
         $query = Event::orderBy('created_at', 'desc');
@@ -160,6 +172,7 @@ class EventController extends Controller
             'consumtions' => $consumtions,
             'pesertas' => $pesertas,
             'statusLogs' => $statusLogs,
+            'allowed_actions' => $this->getAllowedActions($event),
         ]);
     }
 
@@ -323,6 +336,10 @@ class EventController extends Controller
         $oldStatus = $event->status;
         $newStatus = $oldStatus;
 
+        if (!$this->canUpdateStatus($event, $action)) {
+            return response()->json(['error' => 'Anda tidak memiliki akses untuk aksi ini.'], 403);
+        }
+
         switch ($oldStatus) {
             case Event::STATUS_OPEN:
                 if ($action === 'approve') {
@@ -371,9 +388,44 @@ class EventController extends Controller
         }
 
         DB::transaction(function () use ($event, $oldStatus, $newStatus, $description, $validated) {
+            $totalBiayaEvent = (int) round((float) $event->consumtions()->sum('total'));
+
+            if ($newStatus == Event::STATUS_CLOSE_BY_UMUM && $totalBiayaEvent > 0) {
+                $saldo = Saldo::where('id_departemen', $event->id_departemen)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$saldo || $saldo->saldo < $totalBiayaEvent) {
+                    $saldoTersedia = $saldo ? (int) $saldo->saldo : 0;
+                    throw ValidationException::withMessages([
+                        'saldo' => 'Saldo departemen tidak cukup. Dibutuhkan Rp ' . number_format($totalBiayaEvent, 0, ',', '.') . ', tersedia Rp ' . number_format($saldoTersedia, 0, ',', '.'),
+                    ]);
+                }
+
+                $saldoSebelum = (int) $saldo->saldo;
+                $saldoSesudah = $saldoSebelum - $totalBiayaEvent;
+
+                $saldo->update([
+                    'saldo' => $saldoSesudah,
+                    'updated_by' => Auth::id(),
+                    'updated_name' => Auth::user()->name,
+                ]);
+
+                logSaldo::create([
+                    'id_saldo' => $saldo->id,
+                    'saldo' => $totalBiayaEvent,
+                    'description' => 'Pemotongan saldo untuk event: ' . $event->name,
+                    'status' => 'keluar',
+                    'created_by' => Auth::id(),
+                    'created_name' => Auth::user()->name,
+                    'updated_by' => Auth::id(),
+                    'updated_name' => Auth::user()->name,
+                ]);
+            }
+
             $event->update([
                 'status' => $newStatus,
-                'reject_reason' => ($newStatus == Event::STATUS_REJECT) ? $validated['description'] : $event->reject_reason,
+                'reject_reason' => ($newStatus == Event::STATUS_REJECT) ? $validated['description'] : null,
             ]);
 
             StatusLog::create([
@@ -406,7 +458,7 @@ class EventController extends Controller
                     // Create FoodLog for monitoring
                     FoodLog::create([
                         'id_food'      => $food->id,
-                        'type'         => 'out',
+                        'type'         => 'stock_out',
                         'qty'          => $item->qty,
                         'price_before' => $food->price,
                         'price_after'  => $food->price,
@@ -422,5 +474,72 @@ class EventController extends Controller
 
         $statusLabel = Event::STATUS_LABELS[$newStatus] ?? $newStatus;
         return response()->json(['success' => "Status berhasil diubah menjadi: {$statusLabel}"]);
+    }
+
+    private function getAllowedActions(Event $event): array
+    {
+        $actions = [];
+        foreach (['approve', 'reject', 'close'] as $action) {
+            if ($this->canUpdateStatus($event, $action)) {
+                $actions[] = $action;
+            }
+        }
+
+        return $actions;
+    }
+
+    private function canUpdateStatus(Event $event, string $action): bool
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return false;
+        }
+
+        if ($user->hasRole('Admin')) {
+            return true;
+        }
+
+        $user->loadMissing('detail.departemen');
+
+        $userDeptId = optional($user->detail)->id_departemen;
+        $userDeptName = strtolower((string) optional(optional($user->detail)->departemen)->name);
+        $userPosition = strtolower((string) optional($user->detail)->position);
+        $isUmumDept = str_contains($userDeptName, 'umum');
+        $isManager = $user->hasRole('Manager') && $userPosition === 'manager';
+        $isKaryawan = $user->hasRole('Karyawan') && $userPosition === 'karyawan';
+
+        switch ($event->status) {
+            case Event::STATUS_OPEN:
+                return in_array($action, ['approve', 'reject'], true)
+                    && $user->can('approve event departemen')
+                    && $isManager
+                    && (int) $userDeptId === (int) $event->id_departemen;
+
+            case Event::STATUS_APPROVED_VP:
+                return $action === 'approve'
+                    && $user->can('process event umum')
+                    && $isKaryawan
+                    && $isUmumDept;
+
+            case Event::STATUS_ON_PROCESS:
+                return in_array($action, ['approve', 'reject'], true)
+                    && $user->can('approve event umum')
+                    && $isManager
+                    && $isUmumDept;
+
+            case Event::STATUS_APPROVED_VP_UMUM:
+                return $action === 'close'
+                    && $user->can('process event umum')
+                    && $isKaryawan
+                    && $isUmumDept;
+
+            case Event::STATUS_CLOSE_BY_UMUM:
+                return $action === 'close'
+                    && $user->can('close event creator')
+                    && (int) $event->id_user_created === (int) $user->id;
+
+            default:
+                return false;
+        }
     }
 }

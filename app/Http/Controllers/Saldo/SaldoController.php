@@ -14,7 +14,8 @@ class SaldoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:manage saldo');
+        $this->middleware('permission:view saldo')->only(['index', 'show']);
+        $this->middleware('permission:create saldo transaction')->only(['store']);
     }
 
     /**
@@ -22,19 +23,23 @@ class SaldoController extends Controller
      */
     public function index(Request $request)
     {
+        $query = Departemen::where('is_active', true)->with('saldo');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('code_departement', 'like', '%' . $search . '%');
+            });
+        }
+
         if ($request->ajax()) {
-            $departements = Departemen::where('is_active', true)
-                ->with('saldo')
-                ->orderBy('name')
-                ->paginate(10);
+            $departements = $query->orderBy('name')->paginate(10);
 
             return view('saldo.table', compact('departements'))->render();
         }
 
-        $departements = Departemen::where('is_active', true)
-            ->with('saldo')
-            ->orderBy('name')
-            ->paginate(10);
+        $departements = $query->orderBy('name')->paginate(10);
 
         return view('saldo.index', compact('departements'));
     }

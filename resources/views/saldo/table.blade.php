@@ -17,11 +17,13 @@
                     <td>{{ $departements->firstItem() + $key }}</td>
                     <td>
                         <ul class="list-inline font-size-20 contact-links mb-0">
-                            <li class="list-inline-item px-2">
-                                <a href="javascript:void(0);" class="btn-transaksi" data-uuid="{{ $departemen->uuid }}"
-                                    data-departemen="{{ $departemen->name }}" title="Tambah Saldo"><i
-                                        class="bx bx-plus-circle text-success"></i></a>
-                            </li>
+                            @can('create saldo transaction')
+                                <li class="list-inline-item px-2">
+                                    <a href="javascript:void(0);" class="btn-transaksi" data-uuid="{{ $departemen->uuid }}"
+                                        data-departemen="{{ $departemen->name }}" title="Tambah Saldo"><i
+                                            class="bx bx-plus-circle text-success"></i></a>
+                                </li>
+                            @endcan
                             <li class="list-inline-item px-2">
                                 <a href="javascript:void(0);" class="btn-log" data-uuid="{{ $departemen->uuid }}"
                                     data-departemen="{{ $departemen->name }}" title="Lihat Log"><i

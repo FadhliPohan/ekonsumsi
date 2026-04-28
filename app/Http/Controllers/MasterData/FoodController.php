@@ -12,16 +12,21 @@ use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view food')->only(['index', 'show']);
+        $this->middleware('permission:create food')->only(['store']);
+        $this->middleware('permission:edit food')->only(['update', 'addStock']);
+        $this->middleware('permission:delete food')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $query = Food::orderBy('name');
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('description', 'like', '%' . $search . '%');
-            });
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
         $foods = $query->paginate(9);
