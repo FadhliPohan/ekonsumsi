@@ -16,7 +16,7 @@
                     <div class="invoice-title">
                         <h4 class="float-end font-size-16">Order # 12345</h4>
                         <div class="mb-4">
-                            <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="logo" height="20" />
+                            <img src="{{ URL::asset('/assets/images/logos/logo_wit_text.png') }}" alt="logo" height="20" />
                         </div>
                     </div>
                     <hr>

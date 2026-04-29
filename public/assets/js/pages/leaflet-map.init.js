@@ -55,7 +55,7 @@ var LeafIcon = L.Icon.extend({
   }
 }),
     greenIcon = new LeafIcon({
-  iconUrl: "assets/images/logo.svg"
+  iconUrl: "assets/images/logos/logo_no_text.png"
 });
 L.marker([51.5, -.09], {
   icon: greenIcon

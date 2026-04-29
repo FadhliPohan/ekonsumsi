@@ -25,7 +25,7 @@
                         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1005">
                             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                                 <div class="toast-header">
-                                    <img src="assets/images/logo.svg" alt="" class="me-2" height="18">
+                                    <img src="assets/images/logos/logo_no_text.png" alt="" class="me-2" height="18">
                                     <strong class="me-auto">Bootstrap</strong>
                                     <small>11 mins ago</small>
                                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -60,7 +60,7 @@
                 <div style="min-height: 110px;">
                     <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                         <div class="toast-header">
-                            <img src="assets/images/logo.svg" alt="" class="me-2" height="18">
+                            <img src="assets/images/logos/logo_no_text.png" alt="" class="me-2" height="18">
                             <strong class="me-auto">Skote</strong>
                             <small class="text-muted">11 mins ago</small>
                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -89,7 +89,7 @@
                 <div style="min-height: 110px;">
                     <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                         <div class="toast-header">
-                            <img src="assets/images/logo.svg" alt="" class="me-2" height="18">
+                            <img src="assets/images/logos/logo_no_text.png" alt="" class="me-2" height="18">
                             <strong class="me-auto">Skote</strong>
                             <small class="text-muted">11 mins ago</small>
                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -132,7 +132,7 @@
                             <!-- Then put toasts within -->
                             <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                                 <div class="toast-header">
-                                    <img src="assets/images/logo.svg" alt="" class="me-2" height="18">
+                                    <img src="assets/images/logos/logo_no_text.png" alt="" class="me-2" height="18">
                                     <strong class="me-auto">Skote</strong>
                                     <small class="text-muted">just now</small>
                                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -144,7 +144,7 @@
 
                             <div class="toast fade show" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                                 <div class="toast-header">
-                                    <img src="assets/images/logo.svg" alt="" class="me-2" height="18">
+                                    <img src="assets/images/logos/logo_no_text.png" alt="" class="me-2" height="18">
                                     <strong class="me-auto">Skote</strong>
                                     <small class="text-muted">2 sec ago</small>
                                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>

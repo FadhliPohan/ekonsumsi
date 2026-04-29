@@ -22,9 +22,9 @@
                         <div class="home-wrapper">
                             <div class="mb-5">
                                 <a href="index" class="d-block auth-logo">
-                                    <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="20"
+                                    <img src="{{ URL::asset('/assets/images/logos/logo_wit_text.png') }}" alt="" height="20"
                                         class="auth-logo-dark mx-auto">
-                                    <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="20"
+                                    <img src="{{ URL::asset('/assets/images/logos/logo_wit_text.png') }}" alt="" height="20"
                                         class="auth-logo-light mx-auto">
                                 </a>
                             </div>

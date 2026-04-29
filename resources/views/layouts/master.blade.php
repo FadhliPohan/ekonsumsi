@@ -10,7 +10,7 @@
     <meta content="Digital Signage Management System" name="description" />
     <meta content="PT Pusri" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('assets/images/logos/logo_no_text.png') }}">
     @include('layouts.head-css')
 </head>
 

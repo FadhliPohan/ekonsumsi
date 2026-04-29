@@ -34,7 +34,7 @@
                                     <a href="index" class="auth-logo-light">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="{{ URL::asset('/assets/images/logo-light.svg') }}" alt=""
+                                                <img src="{{ URL::asset('/assets/images/logos/logo_no_text.png') }}" alt=""
                                                     class="rounded-circle" height="34">
                                             </span>
                                         </div>
@@ -43,7 +43,7 @@
                                     <a href="index" class="auth-logo-dark">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="{{ URL::asset('/assets/images/logo.svg') }}" alt=""
+                                                <img src="{{ URL::asset('/assets/images/logos/logo_no_text.png') }}" alt=""
                                                     class="rounded-circle" height="34">
                                             </span>
                                         </div>

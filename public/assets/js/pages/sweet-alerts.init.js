@@ -68,7 +68,7 @@ var __webpack_exports__ = {};
       Swal.fire({
         title: "Sweet!",
         text: "Modal with a custom image.",
-        imageUrl: "assets/images/logo-dark.png",
+        imageUrl: "assets/images/logos/logo_wit_text.png",
         imageHeight: 20,
         confirmButtonColor: "#556ee6",
         animation: !1

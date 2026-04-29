@@ -9,7 +9,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('/assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('/assets/images/logos/logo_no_text.png') }}">
 
     <!-- owl.carousel css -->
     <link rel="stylesheet" href="{{ URL::asset('/assets/libs/owl.carousel/owl.carousel.min.css') }}">
@@ -23,8 +23,8 @@
     <nav class="navbar navbar-expand-lg navigation fixed-top sticky">
         <div class="container">
             <a class="navbar-logo" href="index">
-                <img src="{{ URL::asset('/assets/images/logo-dark.png') }}" alt="" height="19" class="logo logo-dark">
-                <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="19" class="logo logo-light">
+                <img src="{{ URL::asset('/assets/images/logos/logo_wit_text.png') }}" alt="" height="19" class="logo logo-dark">
+                <img src="{{ URL::asset('/assets/images/logos/logo_wit_text.png') }}" alt="" height="19" class="logo logo-light">
             </a>
 
             <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
@@ -1141,7 +1141,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="mb-4">
-                        <img src="{{ URL::asset('/assets/images/logo-light.png') }}" alt="" height="20">
+                        <img src="{{ URL::asset('/assets/images/logos/logo_wit_text.png') }}" alt="" height="20">
                     </div>
 
                     <p class="mb-2">
